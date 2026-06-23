@@ -1,31 +1,29 @@
 import { useApp } from '../../store/AppContext';
 import { RoleSwitcher } from './RoleSwitcher';
 import { AccessibilityControls } from '../accessibility/AccessibilityControls';
-import { GovBanner } from './GovBanner';
 import { t } from '../../utils/i18n';
 
-// 상단 헤더: 정부 식별바 + 서비스명 + 역할선택 + 접근성
+// 상단 네비게이션 바: 브랜드 + 역할선택 + 접근성 (깔끔한 톤)
 export function Header() {
   const { accessibility } = useApp();
   const lang = accessibility.language;
   return (
     <header className="app-header">
-      <GovBanner />
       <div className="header-top">
         <div className="brand">
           <span className="brand-logo" aria-hidden>
-            ❀
+            ◈
           </span>
           <div>
             <h1 className="brand-name">{t('appName', lang)}</h1>
-            <p className="brand-sub">
-              세대정보 기반 복지 자동판정 통합 플랫폼
-            </p>
+            <p className="brand-sub">복지 통합서비스 · 시연용 프로토타입</p>
           </div>
         </div>
-        <RoleSwitcher />
+        <div className="header-actions">
+          <AccessibilityControls />
+          <RoleSwitcher />
+        </div>
       </div>
-      <AccessibilityControls />
     </header>
   );
 }

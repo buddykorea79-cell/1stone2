@@ -42,6 +42,7 @@ export function WelfareSearch({
   submitLabel,
   intro,
   onSearch,
+  conditionsFirst = false,
 }: {
   // 신청 처리. 성공 메시지 반환. 미지정 시 신청 불가.
   applyHandler?: (result: RecommendationResult, reason: string) => string;
@@ -51,6 +52,8 @@ export function WelfareSearch({
   intro?: React.ReactNode;
   // 검색 실행 시 호출 (대리 조회 감사로그 등)
   onSearch?: (queryText: string) => void;
+  // true 면 검색조건 폼을 자연어 입력보다 먼저 노출 (일반 국민)
+  conditionsFirst?: boolean;
 }) {
   const { programs, residents, households, selectedCitizenId, accessibility } =
     useApp();
@@ -112,17 +115,39 @@ export function WelfareSearch({
         />
       ) : (
         <>
-          <NaturalLanguageInput
-            onSearch={runSearch}
-            easyMode={accessibility.easyMode}
-          />
-          <SearchConditionForm value={formCond} onChange={setFormCond} />
-          <button
-            className="primary-button"
-            onClick={() => runSearch(formCond.rawQuery ?? '')}
-          >
-            선택한 조건으로 검색
-          </button>
+          {conditionsFirst ? (
+            // 일반 국민: 설명 아래 '검색조건'을 먼저 노출
+            <>
+              <SearchConditionForm value={formCond} onChange={setFormCond} />
+              <button
+                className="primary-button big"
+                onClick={() => runSearch(formCond.rawQuery ?? '')}
+              >
+                이 조건으로 복지 찾기
+              </button>
+              <div className="search-divider">
+                <span>또는 자연어로 검색</span>
+              </div>
+              <NaturalLanguageInput
+                onSearch={runSearch}
+                easyMode={accessibility.easyMode}
+              />
+            </>
+          ) : (
+            <>
+              <NaturalLanguageInput
+                onSearch={runSearch}
+                easyMode={accessibility.easyMode}
+              />
+              <SearchConditionForm value={formCond} onChange={setFormCond} />
+              <button
+                className="primary-button"
+                onClick={() => runSearch(formCond.rawQuery ?? '')}
+              >
+                선택한 조건으로 검색
+              </button>
+            </>
+          )}
 
           {results && (
             <RecommendationList results={results} onSelect={setSelected} />

@@ -34,18 +34,19 @@ export function CitizenMain() {
 
   return (
     <section className="citizen-main">
-      <div className="hero card">
-        <span className="hero-eyebrow">★ 대한민국 복지 통합서비스 (시연)</span>
+      {/* 깔끔한 중앙 정렬 히어로 (설명) */}
+      <div className="hero">
+        <span className="hero-eyebrow">✦ 대한민국 복지 통합서비스 · 시연용</span>
         <h2>
-          흩어진 복지, 이제 한곳에서.
+          내게 맞는 복지를 <span className="grad-text">한곳에서</span>
           <br />
-          신청은 쉽게, 판정은 자동으로.
+          찾고, 신청하고, 자동으로 연결하세요.
         </h2>
         <p className="hero-desc">
           복지 ONE-GOV 는 중앙부처와 지자체에 흩어져 있는 복지를 한 번에
-          검색·신청하고, 주민등록 세대정보를 바탕으로 <strong>받을 수 있는
-          복지를 자동으로 찾아주는</strong> 국가 복지 통합 플랫폼입니다.
-          복잡한 자격 계산 없이, 내 상황만 입력하면 됩니다.
+          검색·신청하고, 주민등록 세대정보를 바탕으로 받을 수 있는 복지를
+          자동으로 찾아주는 국가 복지 통합 플랫폼입니다. 복잡한 자격 계산 없이,
+          아래 조건만 선택하면 됩니다.
         </p>
         <div className="hero-stats">
           <div className="hero-stat">
@@ -65,34 +66,32 @@ export function CitizenMain() {
             <span>자동연결 배치</span>
           </div>
         </div>
-        <div className="hero-points">
-          <span>① 한 번에 통합 검색</span>
-          <span>② 세대 소득 자동 판정</span>
-          <span>③ 자동연결 후보 안내</span>
-        </div>
       </div>
 
-      <div className="card start-card">
-        <strong className="start-title">지금 바로 시작하기</strong>
-        <p className="muted">
-          복지 검색은 로그인 없이 가능합니다. 신청까지 체험하려면 아래에서
-          시연용 국민을 선택하세요.
-        </p>
-        <CitizenSelector />
-      </div>
-
+      {/* 설명 아래 → 검색조건 먼저 (conditionsFirst) */}
       <WelfareSearch
+        conditionsFirst
         applyHandler={applyHandler}
         canApply={!!me}
         cannotApplyReason="신청하려면 상단에서 시연용 국민을 먼저 선택하세요. (검색은 로그인 없이 가능)"
         intro={
           accessibility.easyMode ? (
             <p className="easy-hint">
-              아래 칸에 어떤 도움이 필요한지 적고 ‘복지 찾기’를 누르세요.
+              아래에서 조건을 선택하고 ‘이 조건으로 복지 찾기’를 누르세요.
             </p>
           ) : undefined
         }
       />
+
+      {/* 신청용 시연 국민 선택 (검색조건 아래에 배치) */}
+      <div className="card start-card">
+        <strong className="start-title">신청까지 체험하기</strong>
+        <p className="muted">
+          복지 검색은 로그인 없이 가능합니다. 신청하려면 시연용 국민을
+          선택하세요.
+        </p>
+        <CitizenSelector />
+      </div>
     </section>
   );
 }
