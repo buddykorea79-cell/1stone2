@@ -5,19 +5,19 @@
    ============================================================ */
 
 :root {
-  /* 따뜻한 색상 팔레트 (황톳빛·단청 느낌의 공신력 있는 정부 톤) */
-  --bg: #fbf5ec;
-  --card-bg: #fffdf9;
-  --text: #2f2620;
-  --muted: #8a7763;
-  --primary: #c2562e; /* 따뜻한 테라코타 */
-  --primary-dark: #a3421e;
-  --accent: #e2a13c; /* 황금 호박색 강조 */
-  --gov-deep: #4a3326; /* 깊은 갈색 식별바 */
-  --border: #ecdcc6;
-  --soft: #f6ead8; /* 따뜻한 연베이지 */
-  --radius: 12px;
-  --shadow: 0 2px 10px rgba(120, 70, 30, 0.1);
+  /* 흰색 + 분홍 바탕 팔레트 (밝고 가시성 높은 톤) */
+  --bg: #fff5f9; /* 아주 연한 분홍 배경 */
+  --card-bg: #ffffff; /* 카드는 흰색 */
+  --text: #241019; /* 진한 자주빛 검정 (높은 대비) */
+  --muted: #8a6b78; /* 차분한 모브 */
+  --primary: #d6336c; /* 선명한 라즈베리 핑크 */
+  --primary-dark: #ad2453; /* 진한 핑크 (강조/호버) */
+  --accent: #ff7aa8; /* 밝은 핑크 강조 */
+  --gov-deep: #8a1f4c; /* 깊은 로즈 식별바 */
+  --border: #f4cede; /* 연분홍 테두리 */
+  --soft: #ffe4ee; /* 연분홍 보조 배경 */
+  --radius: 14px;
+  --shadow: 0 4px 16px rgba(214, 51, 108, 0.1);
   font-size: 17px;
 }
 
@@ -340,8 +340,8 @@ textarea {
   color: #1aa260;
 }
 .elig-badge.elig-mid {
-  background: #fdeccb;
-  color: #a87900;
+  background: #fff1cf;
+  color: #8a6500;
 }
 .elig-badge.elig-low {
   background: #eef0f4;
@@ -358,8 +358,8 @@ textarea {
   white-space: nowrap;
 }
 .badge-blue {
-  background: #fbe7cf;
-  color: #1d5fd0;
+  background: #e2ecff;
+  color: #1b4fb0;
 }
 .badge-amber {
   background: #fff3d6;
@@ -446,7 +446,7 @@ td {
   white-space: nowrap;
 }
 th {
-  background: #f3e7d6;
+  background: #fde7f0;
   font-size: 0.85rem;
   color: var(--muted);
 }
@@ -530,11 +530,13 @@ th {
   font-weight: 700;
 }
 .toast-info {
-  background: #fbe7cf;
-  color: #1d5fd0;
+  background: var(--soft);
+  color: var(--primary-dark);
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 12px 14px;
   margin: 12px 0;
+  font-weight: 600;
 }
 .form-warning {
   color: #a87900;
@@ -563,12 +565,14 @@ th {
   margin-left: 8px;
 }
 .easy-hint {
-  background: #fdeccb;
-  color: #a87900;
+  background: var(--soft);
+  color: var(--primary-dark);
+  border: 1px solid var(--border);
   padding: 10px 14px;
   border-radius: 8px;
   display: block;
   font-size: 0.95rem;
+  font-weight: 600;
 }
 .sql-block {
   background: #0b1021;
@@ -630,7 +634,7 @@ th {
 /* 정부 식별 바 */
 .gov-bar {
   background: var(--gov-deep);
-  color: #f7ead9;
+  color: #ffeaf3;
   margin: 0 -16px;
 }
 .gov-bar-inner {
@@ -647,11 +651,11 @@ th {
   font-size: 1.05rem;
 }
 .gov-bar-text strong {
-  color: #ffe9cf;
+  color: #ffd7e7;
 }
 .gov-bar-right {
   margin-left: auto;
-  color: #d9c3aa;
+  color: #f3c6da;
   white-space: nowrap;
 }
 .high-contrast .gov-bar {
@@ -725,32 +729,105 @@ th {
   font-weight: 600;
 }
 
-/* 메인 히어로 강조 */
+/* 메인 히어로 — 분홍 그라데이션 배너 (멋진 소개) */
 .hero {
-  background: linear-gradient(180deg, #fff8ee, var(--card-bg));
-  border-top: 4px solid var(--primary);
+  background: linear-gradient(135deg, #ff5e9c 0%, var(--primary) 55%, #b81e5b 100%);
+  color: #fff;
+  border: none;
+  padding: 30px 28px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::after {
+  /* 은은한 장식 원 */
+  content: '';
+  position: absolute;
+  right: -60px;
+  top: -60px;
+  width: 220px;
+  height: 220px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+}
+.hero > * {
+  position: relative;
+  z-index: 1;
+}
+.hero h2 {
+  color: #fff;
+  font-size: 1.7rem;
+  line-height: 1.35;
+}
+.hero-desc {
+  color: #ffe6f0;
+  font-size: 1.02rem;
+  max-width: 760px;
 }
 .hero-eyebrow {
   display: inline-block;
-  background: var(--primary);
+  background: rgba(255, 255, 255, 0.22);
   color: #fff;
-  font-size: 0.78rem;
-  font-weight: 700;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
   border-radius: 999px;
-  padding: 4px 12px;
-  margin-bottom: 10px;
+  padding: 5px 14px;
+  margin-bottom: 12px;
+  backdrop-filter: blur(2px);
+}
+.hero-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  margin: 18px 0 6px;
+}
+.hero-stat b {
+  display: block;
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+.hero-stat span {
+  font-size: 0.85rem;
+  color: #ffe0ee;
 }
 .hero-points {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin: 12px 0 16px;
+  margin: 16px 0 4px;
 }
 .hero-points span {
-  background: var(--soft);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  color: #fff;
   font-weight: 700;
+  border-radius: 999px;
+  padding: 8px 14px;
+}
+.hero strong {
+  color: #fff;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.6);
+  text-underline-offset: 3px;
+}
+.high-contrast .hero {
+  background: #000;
+  border: 2px solid #ffe23f;
+}
+.high-contrast .hero h2,
+.high-contrast .hero-desc,
+.high-contrast .hero-stat span,
+.high-contrast .hero strong {
+  color: #ffe23f;
+}
+
+/* 시작 카드 */
+.start-card {
+  border-top: 4px solid var(--primary);
+}
+.start-title {
+  display: block;
+  font-size: 1.15rem;
   color: var(--primary-dark);
+  margin-bottom: 4px;
 }
