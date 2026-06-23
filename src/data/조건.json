@@ -1,0 +1,50 @@
+[
+  {
+    "householdSize": 1,
+    "baseIncome100": 2200000,
+    "levels": [
+      {
+        "level": "L5",
+        "name": "자동연결 후보",
+        "minIncome": 0,
+        "maxIncome": 660000,
+        "thresholdPercent": 30
+      },
+      {
+        "level": "L4",
+        "name": "수급 가능성 높음",
+        "minIncome": 660001,
+        "maxIncome": 1100000,
+        "thresholdPercent": 50
+      },
+      {
+        "level": "L3",
+        "name": "조건 확인 필요",
+        "minIncome": 1100001,
+        "maxIncome": 1540000,
+        "thresholdPercent": 70
+      },
+      {
+        "level": "L2",
+        "name": "일부 지원 가능",
+        "minIncome": 1540001,
+        "maxIncome": 2200000,
+        "thresholdPercent": 100
+      },
+      {
+        "level": "L1",
+        "name": "정보 안내 대상",
+        "minIncome": 2200001,
+        "maxIncome": 2860000,
+        "thresholdPercent": 130
+      },
+      {
+        "level": "LN",
+        "name": "소득 기준 초과 가능성",
+        "minIncome": 2860001,
+        "maxIncome": null,
+        "thresholdPercent": null
+      }
+    ]
+  }
+]
