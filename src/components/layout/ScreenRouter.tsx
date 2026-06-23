@@ -1,5 +1,6 @@
 import { useApp } from '../../store/AppContext';
 import { canAccess } from '../../utils/roles';
+import { ScreenInfo } from './ScreenInfo';
 import { CitizenMain } from '../citizen/CitizenMain';
 import { MyApplications } from '../citizen/MyApplications';
 import { MyNotifications } from '../citizen/MyNotifications';
@@ -29,7 +30,8 @@ export function ScreenRouter() {
     );
   }
 
-  switch (screen) {
+  const renderScreen = () => {
+    switch (screen) {
     case 'main':
       return <CitizenMain />;
     case 'myApplications':
@@ -62,5 +64,13 @@ export function ScreenRouter() {
       return <AdminPanel />;
     default:
       return <CitizenMain />;
-  }
+    }
+  };
+
+  return (
+    <>
+      <ScreenInfo />
+      {renderScreen()}
+    </>
+  );
 }

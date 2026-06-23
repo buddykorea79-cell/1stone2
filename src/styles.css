@@ -1,19 +1,23 @@
 /* ============================================================
-   복지루틴 스타일
+   복지 ONE-GOV 스타일
    - 고령자/약자 고려: 큰 글자, 넉넉한 버튼, 높은 대비, 카드 레이아웃
    - 접근성 클래스: .large-text / .high-contrast / .easy-mode
    ============================================================ */
 
 :root {
-  --bg: #f4f6fb;
-  --card-bg: #ffffff;
-  --text: #1f2433;
-  --muted: #5b6478;
-  --primary: #1d5fd0;
-  --primary-dark: #16489e;
-  --border: #d7deeb;
+  /* 따뜻한 색상 팔레트 (황톳빛·단청 느낌의 공신력 있는 정부 톤) */
+  --bg: #fbf5ec;
+  --card-bg: #fffdf9;
+  --text: #2f2620;
+  --muted: #8a7763;
+  --primary: #c2562e; /* 따뜻한 테라코타 */
+  --primary-dark: #a3421e;
+  --accent: #e2a13c; /* 황금 호박색 강조 */
+  --gov-deep: #4a3326; /* 깊은 갈색 식별바 */
+  --border: #ecdcc6;
+  --soft: #f6ead8; /* 따뜻한 연베이지 */
   --radius: 12px;
-  --shadow: 0 2px 8px rgba(30, 50, 90, 0.08);
+  --shadow: 0 2px 10px rgba(120, 70, 30, 0.1);
   font-size: 17px;
 }
 
@@ -296,7 +300,7 @@ textarea {
 }
 .rec-category {
   display: inline-block;
-  background: #eef2fb;
+  background: var(--soft);
   color: var(--primary-dark);
   border-radius: 6px;
   padding: 2px 8px;
@@ -336,7 +340,7 @@ textarea {
   color: #1aa260;
 }
 .elig-badge.elig-mid {
-  background: #fff4d6;
+  background: #fdeccb;
   color: #a87900;
 }
 .elig-badge.elig-low {
@@ -354,7 +358,7 @@ textarea {
   white-space: nowrap;
 }
 .badge-blue {
-  background: #e4eefc;
+  background: #fbe7cf;
   color: #1d5fd0;
 }
 .badge-amber {
@@ -442,7 +446,7 @@ td {
   white-space: nowrap;
 }
 th {
-  background: #f0f3fa;
+  background: #f3e7d6;
   font-size: 0.85rem;
   color: var(--muted);
 }
@@ -526,7 +530,7 @@ th {
   font-weight: 700;
 }
 .toast-info {
-  background: #e4eefc;
+  background: #fbe7cf;
   color: #1d5fd0;
   border-radius: 8px;
   padding: 12px 14px;
@@ -541,7 +545,7 @@ th {
   font-weight: 700;
 }
 .why-box {
-  background: #f7f9fd;
+  background: var(--soft);
   border-radius: 8px;
   padding: 12px 14px;
   margin: 12px 0;
@@ -559,7 +563,7 @@ th {
   margin-left: 8px;
 }
 .easy-hint {
-  background: #fff4d6;
+  background: #fdeccb;
   color: #a87900;
   padding: 10px 14px;
   border-radius: 8px;
@@ -617,4 +621,136 @@ th {
   .kv-row {
     grid-template-columns: 100px 1fr;
   }
+}
+
+/* ============================================================
+   복지 ONE-GOV 추가 스타일 (정부 식별바 / 화면안내 / 출처배지)
+   ============================================================ */
+
+/* 정부 식별 바 */
+.gov-bar {
+  background: var(--gov-deep);
+  color: #f7ead9;
+  margin: 0 -16px;
+}
+.gov-bar-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 7px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.82rem;
+}
+.gov-emblem {
+  color: var(--accent);
+  font-size: 1.05rem;
+}
+.gov-bar-text strong {
+  color: #ffe9cf;
+}
+.gov-bar-right {
+  margin-left: auto;
+  color: #d9c3aa;
+  white-space: nowrap;
+}
+.high-contrast .gov-bar {
+  background: #000;
+  color: #ffe23f;
+  border-bottom: 2px solid #ffe23f;
+}
+
+/* 브랜드 로고를 황금 테두리의 정부 엠블럼처럼 */
+.brand-logo {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.4);
+}
+
+/* 화면 안내 패널 */
+.screen-info {
+  display: flex;
+  gap: 12px;
+  background: var(--soft);
+  border: 1px solid var(--border);
+  border-left: 6px solid var(--primary);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 18px;
+}
+.screen-info-icon {
+  font-size: 1.3rem;
+  color: var(--primary);
+  line-height: 1.2;
+}
+.screen-info-title {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--primary-dark);
+}
+.screen-info-body p {
+  margin: 0;
+}
+.screen-info-steps {
+  margin: 8px 0 0;
+  padding-left: 20px;
+  font-size: 0.92rem;
+  color: var(--text);
+}
+.high-contrast .screen-info {
+  background: #161616;
+}
+
+/* 출처 배지 (중앙부처/지자체) */
+.source-badge {
+  display: inline-block;
+  margin-left: 6px;
+  background: #fff;
+  border: 1px solid var(--accent);
+  color: var(--primary-dark);
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+.rec-agency {
+  margin: 4px 0 0;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+.detail-summary {
+  background: var(--soft);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin: 10px 0;
+  font-weight: 600;
+}
+
+/* 메인 히어로 강조 */
+.hero {
+  background: linear-gradient(180deg, #fff8ee, var(--card-bg));
+  border-top: 4px solid var(--primary);
+}
+.hero-eyebrow {
+  display: inline-block;
+  background: var(--primary);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 4px 12px;
+  margin-bottom: 10px;
+}
+.hero-points {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 0 16px;
+}
+.hero-points span {
+  background: var(--soft);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-weight: 700;
+  color: var(--primary-dark);
 }

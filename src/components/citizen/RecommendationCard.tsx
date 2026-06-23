@@ -22,13 +22,23 @@ export function RecommendationCard({
         <div>
           <h4>{program.name}</h4>
           <span className="rec-category">{program.category}</span>
+          {program.source && (
+            <span className="source-badge">
+              {program.source === '지자체'
+                ? `지자체 · ${program.regionSido || '지역'}`
+                : '중앙부처'}
+            </span>
+          )}
         </div>
         <div className="rec-elig">
           <span className={`elig-badge ${cls}`}>받을 가능성 {eligibility}</span>
           <span className="rec-score">점수 {score}</span>
         </div>
       </div>
-      <p className="rec-benefit">{program.benefit}</p>
+      {program.agencyId && (
+        <p className="rec-agency">담당: {program.agencyId}</p>
+      )}
+      <p className="rec-benefit">{program.summary || program.benefit}</p>
       <ul className="rec-reasons">
         {reasons.map((r, i) => (
           <li key={i}>· {r}</li>

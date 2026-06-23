@@ -1,5 +1,5 @@
 // ============================================================
-// 복지루틴 - 공통 타입 정의
+// 복지 ONE-GOV - 공통 타입 정의
 // 모든 주요 데이터 구조를 TypeScript 타입으로 명시한다.
 // ============================================================
 
@@ -118,6 +118,11 @@ export interface WelfareProgram {
   requiredChecks: string[];
   applyMethod: string;
   status: string;
+  // --- 실데이터(복지로 기반) 연계용 선택 필드 ---
+  source?: string; // '중앙부처' | '지자체'
+  regionSido?: string; // 지자체 시도
+  summary?: string; // 한줄 요약
+  detailUrl?: string; // 복지로 상세 링크
 }
 
 // 신청 데이터

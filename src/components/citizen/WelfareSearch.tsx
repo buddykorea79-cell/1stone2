@@ -81,7 +81,8 @@ export function WelfareSearch({
         merged.needs.length > 0 ? merged.needs : citizenCond.needs ?? [],
       rawQuery: nlText,
     };
-    setResults(getRecommendedPrograms(programs, finalCond));
+    // 실데이터 포함 다량 매칭 → 상위 30건만 노출
+    setResults(getRecommendedPrograms(programs, finalCond).slice(0, 30));
     setSelected(null);
     setToast('');
     onSearch?.(nlText || JSON.stringify(finalCond.needs));

@@ -4,7 +4,17 @@
 // ============================================================
 
 import { INITIAL_WELFARE_PROGRAMS } from '../data/mockData';
+import realServices from '../data/welfareServices.json';
+import type { WelfareProgram } from '../types';
 import { generateMockResidents } from './residentGenerator';
+
+// 복지로 기반 실데이터(중앙부처 + 서울/경기 표본)를 WelfareProgram 형태로 사용.
+// 시연 시나리오용 7개 사업을 앞에 두어 추천 결과가 안정적으로 나오게 한다.
+const REAL_SERVICES = realServices as unknown as WelfareProgram[];
+const ALL_PROGRAMS: WelfareProgram[] = [
+  ...INITIAL_WELFARE_PROGRAMS,
+  ...REAL_SERVICES,
+];
 import {
   getResidents,
   getWelfarePrograms,
@@ -21,7 +31,7 @@ export function ensureMockData(force = false): void {
   }
 
   if (getWelfarePrograms().length === 0) {
-    setWelfarePrograms(INITIAL_WELFARE_PROGRAMS);
+    setWelfarePrograms(ALL_PROGRAMS);
   }
 
   if (getResidents().length === 0) {

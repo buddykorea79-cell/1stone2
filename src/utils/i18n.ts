@@ -8,7 +8,12 @@ import type { AccessibilitySettings } from '../types';
 type Lang = AccessibilitySettings['language'];
 
 const DICT: Record<string, Record<Lang, string>> = {
-  appName: { ko: '복지루틴', en: 'WelfareRoutine', zh: '福利程序', vi: 'WelfareRoutine' },
+  appName: {
+    ko: '복지 ONE-GOV',
+    en: 'Welfare ONE-GOV',
+    zh: '福利 ONE-GOV',
+    vi: 'Welfare ONE-GOV',
+  },
   search: { ko: '복지 찾기', en: 'Find Welfare', zh: '查找福利', vi: 'Tìm phúc lợi' },
   recommend: { ko: '추천받기', en: 'Recommend', zh: '推荐', vi: 'Gợi ý' },
   apply: { ko: '신청하기', en: 'Apply', zh: '申请', vi: 'Đăng ký' },

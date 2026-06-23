@@ -1,16 +1,17 @@
 import { useState } from 'react';
 import type { WelfareProgram } from '../../types';
-import { setWelfarePrograms } from '../../utils/storage';
 
 // 복지사업 JSON 편집기 (parse 오류/필수필드 검증)
+// 편집 대상은 "직접 등록한 사업(데모/커스텀)"으로 한정한다.
+// 복지로 실데이터(source 보유)는 읽기전용 참조이므로 저장 시 상위에서 병합한다.
 export function WelfareProgramJsonEditor({
-  programs,
-  onSaved,
+  editablePrograms,
+  onPersist,
 }: {
-  programs: WelfareProgram[];
-  onSaved: () => void;
+  editablePrograms: WelfareProgram[];
+  onPersist: (parsed: WelfareProgram[]) => void;
 }) {
-  const [text, setText] = useState(JSON.stringify(programs, null, 2));
+  const [text, setText] = useState(JSON.stringify(editablePrograms, null, 2));
   const [error, setError] = useState('');
   const [ok, setOk] = useState('');
 
@@ -48,17 +49,16 @@ export function WelfareProgramJsonEditor({
       setError(v);
       return;
     }
-    setWelfarePrograms(parsed as WelfareProgram[]);
-    setOk('복지사업 데이터를 저장했습니다.');
-    onSaved();
+    onPersist(parsed as WelfareProgram[]);
+    setOk('복지사업 데이터를 저장했습니다. (복지로 실데이터와 병합)');
   };
 
   return (
     <div className="card">
-      <h4>복지사업 JSON 편집</h4>
+      <h4>복지사업 JSON 편집 (직접 등록 사업)</h4>
       <p className="muted">
-        welfarePrograms 전체를 JSON 으로 편집합니다. 저장 시 필수 필드를
-        검증합니다.
+        직접 등록한 사업 {editablePrograms.length}건을 JSON 으로 편집합니다.
+        저장 시 필수 필드를 검증하고, 복지로 실데이터와 병합되어 저장됩니다.
       </p>
       <textarea
         className="json-editor"

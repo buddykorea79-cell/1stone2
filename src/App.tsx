@@ -25,8 +25,9 @@ export default function App() {
         <ScreenRouter />
       </main>
       <footer className="app-footer">
-        복지루틴 프로토타입 · 모든 데이터는 가상이며 실제 개인정보가 아닙니다 ·
-        실제 인증/정부 API/지급/알림 발송은 mock 처리됩니다.
+        복지 ONE-GOV 프로토타입 · 복지서비스 데이터는 복지로 공개정보를 가공한
+        것이며, 주민·세대 데이터는 모두 가상입니다 · 실제 인증/정부 API/지급/알림
+        발송은 mock 처리됩니다.
       </footer>
     </div>
   );

@@ -26,6 +26,15 @@ export function WelfareDetail({
       </button>
       <h2>{program.name}</h2>
       <span className="rec-category">{program.category}</span>
+      {program.source && (
+        <span className="source-badge">
+          {program.source === '지자체'
+            ? `지자체 · ${program.regionSido || '지역'}`
+            : '중앙부처'}{' '}
+          · 출처 복지로
+        </span>
+      )}
+      {program.summary && <p className="detail-summary">{program.summary}</p>}
 
       <dl className="detail-dl">
         <dt>지원 대상</dt>
@@ -42,6 +51,17 @@ export function WelfareDetail({
         <dt>필요 확인 항목</dt>
         <dd>{program.requiredChecks.join(', ')}</dd>
       </dl>
+
+      {program.detailUrl && (
+        <a
+          className="link-button"
+          href={program.detailUrl}
+          target="_blank"
+          rel="noreferrer"
+        >
+          복지로에서 상세 보기 ↗
+        </a>
+      )}
 
       <div className="why-box">
         <strong>추천 이유</strong>

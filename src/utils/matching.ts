@@ -127,14 +127,21 @@ export function getRecommendedPrograms(
     .filter((p) => p.status === 'active')
     .map((program) => {
       const { score, reasons } = calculateRecommendationScore(program, cond);
+      // 직접 검증한 대표 복지사업(source 없음)은 우선 안내한다.
+      const curatedBonus = program.source ? 0 : 3;
+      const finalReasons = generateRecommendationReason(reasons, program);
+      if (curatedBonus > 0 && score > 0) {
+        finalReasons.unshift('대표 복지사업으로 우선 안내됩니다.');
+      }
       return {
         program,
-        score,
-        eligibility: getEligibilityLevel(score),
-        reasons: generateRecommendationReason(reasons, program),
+        score: score + curatedBonus,
+        eligibility: getEligibilityLevel(score + curatedBonus),
+        reasons: finalReasons,
       };
     })
     .filter((r) => r.score > 0)
+    // 점수 동률이면 직접 검증 사업(중앙/지자체보다) 우선
     .sort((a, b) => b.score - a.score);
 
   return results;
