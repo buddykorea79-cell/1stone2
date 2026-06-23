@@ -126,6 +126,7 @@
   .badge-red{background:#fde4e4;color:#c0392b;}
   .badge-amber{background:#fff3d6;color:#a87900;}
   .badge-purple{background:#efe6fb;color:#6c2bd9;}
+  .badge-blue{background:#e8f0ff;color:#2b5bd7;}
 
   .suggest{border:1.5px solid var(--accent);background:linear-gradient(135deg,#f7f5ff,#fdf2d6);
     border-radius:var(--radius);padding:18px 20px;margin-bottom:18px;}
@@ -142,6 +143,26 @@
     font-family:D2Coding,Consolas,monospace;}
   .app-footer{margin-top:32px;padding-top:16px;border-top:1px solid var(--border);
     color:var(--muted);font-size:.82rem;text-align:center;}
+
+  /* 역할 화면 */
+  .role-view{display:none;}
+  .role-view.active{display:block;}
+  .view-head{margin:8px 0 18px;}
+  .view-head h2{margin:0 0 4px;font-size:1.5rem;letter-spacing:-.02em;}
+  .view-head p{margin:0;color:var(--muted);font-size:.92rem;}
+  .role-pill{display:inline-block;background:var(--soft);color:var(--primary-dark);font-weight:700;
+    font-size:.8rem;border-radius:999px;padding:4px 12px;margin-bottom:10px;}
+  .dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:18px;}
+  .dash-stat{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px;box-shadow:var(--shadow);}
+  .dash-stat b{display:block;font-size:1.6rem;font-weight:800;background:var(--grad);
+    -webkit-background-clip:text;background-clip:text;color:transparent;}
+  .dash-stat span{font-size:.84rem;color:var(--muted);}
+  table.tbl{width:100%;border-collapse:collapse;font-size:.88rem;}
+  table.tbl th,table.tbl td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--border);}
+  table.tbl th{color:var(--muted);font-weight:700;font-size:.82rem;}
+  table.tbl tr:last-child td{border-bottom:none;}
+  .st-badge{font-size:.76rem;font-weight:700;border-radius:999px;padding:3px 9px;}
+  body.high-contrast .dash-stat,body.high-contrast .dash-stat b{color:#ffe23f;-webkit-text-fill-color:#ffe23f;}
 
   .spinner{display:inline-block;width:16px;height:16px;border:3px solid #e5e7eb;border-top-color:var(--primary);
     border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:6px;}
@@ -179,15 +200,19 @@
     <label class="role-switcher">
       <span class="role-switcher-label" data-i18n="roleLabel">역할</span>
       <select id="roleSelect" aria-label="역할 선택">
-        <option value="citizen" data-i18n="roleCitizen">국민(복지 찾기)</option>
-        <option value="staff" data-i18n="roleStaff">복지 담당</option>
-        <option value="admin" data-i18n="roleAdmin">복지 총괄</option>
+        <option value="citizen" data-i18n="role_citizen">일반 국민</option>
+        <option value="center_staff" data-i18n="role_center_staff">주민센터 담당</option>
+        <option value="welfare_staff" data-i18n="role_welfare_staff">복지 담당</option>
+        <option value="agency_admin" data-i18n="role_agency_admin">기관 총괄</option>
+        <option value="welfare_super_admin" data-i18n="role_welfare_super_admin">복지 총괄</option>
+        <option value="system_admin" data-i18n="role_system_admin">시스템 관리자</option>
       </select>
     </label>
   </div>
 </div></header>
 
 <main>
+  <div id="view-citizen" class="role-view active">
   <!-- HERO (기준화면 그대로) -->
   <section class="hero">
     <span class="hero-eyebrow" data-i18n="heroEyebrow">✦ 대한민국 복지 통합서비스 · 시연용</span>
@@ -262,6 +287,132 @@
     <summary>검색 조건·판정 디버그 보기</summary>
     <pre id="debugOut"></pre>
   </details>
+  </div><!-- /view-citizen -->
+
+  <!-- 주민센터 담당 -->
+  <div id="view-center_staff" class="role-view">
+    <div class="view-head">
+      <span class="role-pill" data-i18n="role_center_staff">주민센터 담당</span>
+      <h2 data-i18n="cs_title">신청 관리</h2>
+      <p data-i18n="cs_sub">접수된 복지 신청을 확인하고 대리 신청을 처리합니다.</p>
+    </div>
+    <div class="dash-grid">
+      <div class="dash-stat"><b>12</b><span data-i18n="cs_s1">접수 신청</span></div>
+      <div class="dash-stat"><b>5</b><span data-i18n="cs_s2">처리 대기</span></div>
+      <div class="dash-stat"><b>3</b><span data-i18n="cs_s3">대리 신청</span></div>
+    </div>
+    <div class="card">
+      <h3 data-i18n="cs_list">신청 목록</h3>
+      <table class="tbl">
+        <thead><tr><th data-i18n="th_applicant">신청자</th><th data-i18n="th_service">복지사업</th><th data-i18n="th_type">유형</th><th data-i18n="th_status">상태</th></tr></thead>
+        <tbody>
+          <tr><td>김복지</td><td>주거급여</td><td><span class="st-badge badge-purple" data-i18n="ty_self">본인</span></td><td><span class="st-badge badge-amber" data-i18n="stt_wait">처리대기</span></td></tr>
+          <tr><td>박영수</td><td>기초연금</td><td><span class="st-badge badge-blue" data-i18n="ty_deleg">대리</span></td><td><span class="st-badge badge-green" data-i18n="stt_done">승인</span></td></tr>
+          <tr><td>이순자</td><td>긴급복지 의료지원</td><td><span class="st-badge badge-blue" data-i18n="ty_deleg">대리</span></td><td><span class="st-badge badge-amber" data-i18n="stt_wait">처리대기</span></td></tr>
+          <tr><td>최민호</td><td>노인 일자리</td><td><span class="st-badge badge-purple" data-i18n="ty_self">본인</span></td><td><span class="st-badge badge-green" data-i18n="stt_done">승인</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 복지 담당 -->
+  <div id="view-welfare_staff" class="role-view">
+    <div class="view-head">
+      <span class="role-pill" data-i18n="role_welfare_staff">복지 담당</span>
+      <h2 data-i18n="ws_title">복지사업 관리</h2>
+      <p data-i18n="ws_sub">담당 복지사업과 신청 승인을 관리합니다.</p>
+    </div>
+    <div class="dash-grid">
+      <div class="dash-stat"><b>8</b><span data-i18n="ws_s1">담당 사업</span></div>
+      <div class="dash-stat"><b>14</b><span data-i18n="ws_s2">승인 대기</span></div>
+      <div class="dash-stat"><b>2,340만</b><span data-i18n="ws_s3">이번달 지급</span></div>
+    </div>
+    <div class="card">
+      <h3 data-i18n="ws_list">담당 복지사업</h3>
+      <table class="tbl">
+        <thead><tr><th data-i18n="th_program">사업명</th><th data-i18n="th_target">대상</th><th data-i18n="th_budget">예산</th><th data-i18n="th_apps">신청</th></tr></thead>
+        <tbody>
+          <tr><td>주거급여(맞춤형)</td><td data-i18n="tg_lowinc">저소득 가구</td><td>1.2억</td><td>32</td></tr>
+          <tr><td>노인 일자리 지원</td><td data-i18n="tg_senior">노년</td><td>8천만</td><td>21</td></tr>
+          <tr><td>긴급복지 의료지원</td><td data-i18n="tg_emerg">위기 가구</td><td>5천만</td><td>9</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 기관 총괄 -->
+  <div id="view-agency_admin" class="role-view">
+    <div class="view-head">
+      <span class="role-pill" data-i18n="role_agency_admin">기관 총괄</span>
+      <h2 data-i18n="aa_title">기관 대시보드</h2>
+      <p data-i18n="aa_sub">기관 단위 신청 처리 현황과 자동연결 배치를 관리합니다.</p>
+    </div>
+    <div class="dash-grid">
+      <div class="dash-stat"><b>1,820</b><span data-i18n="aa_s1">관리 세대</span></div>
+      <div class="dash-stat"><b>47</b><span data-i18n="aa_s2">진행 신청</span></div>
+      <div class="dash-stat"><b>6</b><span data-i18n="aa_s3">배치 실행 횟수</span></div>
+    </div>
+    <div class="card">
+      <h3 data-i18n="aa_batch">자동연결 배치 실행 현황</h3>
+      <table class="tbl">
+        <thead><tr><th data-i18n="th_round">회차</th><th data-i18n="th_target_hh">대상 세대</th><th data-i18n="th_matched">연결</th><th data-i18n="th_status">상태</th></tr></thead>
+        <tbody>
+          <tr><td>#6</td><td>320</td><td>148</td><td><span class="st-badge badge-green" data-i18n="stt_complete">완료</span></td></tr>
+          <tr><td>#5</td><td>410</td><td>205</td><td><span class="st-badge badge-green" data-i18n="stt_complete">완료</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 복지 총괄 -->
+  <div id="view-welfare_super_admin" class="role-view">
+    <div class="view-head">
+      <span class="role-pill" data-i18n="role_welfare_super_admin">복지 총괄</span>
+      <h2 data-i18n="wsa_title">전체 대시보드</h2>
+      <p data-i18n="wsa_sub">전국 세대·복지 연계 현황을 총괄합니다.</p>
+    </div>
+    <div class="dash-grid">
+      <div class="dash-stat"><b>5,021</b><span data-i18n="wsa_s1">연계 복지서비스</span></div>
+      <div class="dash-stat"><b>38,400</b><span data-i18n="wsa_s2">전체 세대</span></div>
+      <div class="dash-stat"><b>16</b><span data-i18n="wsa_s3">지원 시·도</span></div>
+    </div>
+    <div class="card">
+      <h3 data-i18n="wsa_region">지역별 세대 수 (상위)</h3>
+      <table class="tbl">
+        <thead><tr><th data-i18n="th_region">지역</th><th data-i18n="th_hh">세대 수</th><th data-i18n="th_matched_rate">연계율</th></tr></thead>
+        <tbody>
+          <tr><td>경기도</td><td>9,820</td><td>71%</td></tr>
+          <tr><td>서울특별시</td><td>7,140</td><td>68%</td></tr>
+          <tr><td>부산광역시</td><td>3,260</td><td>64%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 시스템 관리자 -->
+  <div id="view-system_admin" class="role-view">
+    <div class="view-head">
+      <span class="role-pill" data-i18n="role_system_admin">시스템 관리자</span>
+      <h2 data-i18n="sa_title">시스템 관리</h2>
+      <p data-i18n="sa_sub">데이터 동기화·사용자 권한·시스템 로그를 관리합니다.</p>
+    </div>
+    <div class="dash-grid">
+      <div class="dash-stat"><b>342</b><span data-i18n="sa_s1">등록 사용자</span></div>
+      <div class="dash-stat"><b>정상</b><span data-i18n="sa_s2">API 상태</span></div>
+      <div class="dash-stat"><b>5,021</b><span data-i18n="sa_s3">동기화 데이터</span></div>
+    </div>
+    <div class="card">
+      <h3 data-i18n="sa_perm">사용자 권한 관리</h3>
+      <table class="tbl">
+        <thead><tr><th data-i18n="th_account">계정</th><th data-i18n="th_role">역할</th><th data-i18n="th_status">상태</th></tr></thead>
+        <tbody>
+          <tr><td>kim.center</td><td data-i18n="role_center_staff">주민센터 담당</td><td><span class="st-badge badge-green" data-i18n="stt_active">활성</span></td></tr>
+          <tr><td>park.welfare</td><td data-i18n="role_welfare_staff">복지 담당</td><td><span class="st-badge badge-green" data-i18n="stt_active">활성</span></td></tr>
+          <tr><td>admin.super</td><td data-i18n="role_welfare_super_admin">복지 총괄</td><td><span class="st-badge badge-green" data-i18n="stt_active">활성</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
   <div class="app-footer">복지 ONE-GOV · 시연용 프로토타입 · 데이터 출처: 복지로 / 지자체 공공데이터</div>
 </main>
@@ -473,7 +624,15 @@ const I18N = {
     searchBtn:"Find Welfare", precisionLabel:"Precision first (hide ineligible)", cutoffLabel:"Similarity cutoff",
     condTitle:"Key Conditions", fAge:"Age", fGender:"Gender", fIncome:"Monthly income (10k KRW)", fHousehold:"Household size", fSido:"Province", fSgg:"District",
     lblHouseholdType:"Household type", lblLifeCycle:"Life stage", lblInterest:"Interests",
-    resultsTitle:"Benefits you can receive", uncertainTitle:"Possible with more information", emptyHint:"Enter info above and click [Find Welfare]." },
+    resultsTitle:"Benefits you can receive", uncertainTitle:"Possible with more information", emptyHint:"Enter info above and click [Find Welfare].",
+    role_citizen:"General Citizen", role_center_staff:"Center Staff", role_welfare_staff:"Welfare Officer", role_agency_admin:"Agency Head", role_welfare_super_admin:"Welfare Director", role_system_admin:"System Admin",
+    cs_title:"Application Management", cs_sub:"Review welfare applications and handle proxy applications.", cs_s1:"Received", cs_s2:"Pending", cs_s3:"Proxy apps", cs_list:"Application List",
+    ws_title:"Welfare Program Management", ws_sub:"Manage your welfare programs and approvals.", ws_s1:"Programs", ws_s2:"Pending approval", ws_s3:"Paid this month", ws_list:"My Welfare Programs",
+    aa_title:"Agency Dashboard", aa_sub:"Manage agency-level processing and auto-matching batches.", aa_s1:"Households", aa_s2:"Active apps", aa_s3:"Batch runs", aa_batch:"Auto-match Batch Status",
+    wsa_title:"National Dashboard", wsa_sub:"Oversee nationwide household & welfare linkage.", wsa_s1:"Linked services", wsa_s2:"Total households", wsa_s3:"Regions", wsa_region:"Households by Region (Top)",
+    sa_title:"System Management", sa_sub:"Manage data sync, user roles, and system logs.", sa_s1:"Registered users", sa_s2:"API status", sa_s3:"Synced data", sa_perm:"User Role Management",
+    th_applicant:"Applicant", th_service:"Program", th_type:"Type", th_status:"Status", th_program:"Program", th_target:"Target", th_budget:"Budget", th_apps:"Apps", th_round:"Round", th_target_hh:"Target HH", th_matched:"Matched", th_region:"Region", th_hh:"Households", th_matched_rate:"Link rate", th_account:"Account", th_role:"Role",
+    ty_self:"Self", ty_deleg:"Proxy", stt_wait:"Pending", stt_done:"Approved", stt_complete:"Done", stt_active:"Active", tg_lowinc:"Low-income", tg_senior:"Senior", tg_emerg:"Crisis HH" },
   zh:{ brandSub:"福利综合服务 · 一站获取您的福利", largeText:"大 字体", highContrast:"高对比", easyMode:"简单语言",
     roleLabel:"角色", roleCitizen:"市民(查找福利)", roleStaff:"福利专员", roleAdmin:"福利总管",
     heroEyebrow:"✦ 韩国福利综合服务 · 演示",
@@ -484,7 +643,15 @@ const I18N = {
     searchBtn:"查找福利", precisionLabel:"精确优先(隐藏不符合的)", cutoffLabel:"相似度阈值",
     condTitle:"主要条件选择", fAge:"年龄", fGender:"性别", fIncome:"月收入(万韩元)", fHousehold:"家庭人数", fSido:"市·道", fSgg:"市·郡·区",
     lblHouseholdType:"家庭类型", lblLifeCycle:"生命周期", lblInterest:"关注主题",
-    resultsTitle:"您可获得的福利", uncertainTitle:"补充信息后或可获得的福利", emptyHint:"在上方输入信息并点击[查找福利]。" },
+    resultsTitle:"您可获得的福利", uncertainTitle:"补充信息后或可获得的福利", emptyHint:"在上方输入信息并点击[查找福利]。",
+    role_citizen:"普通市民", role_center_staff:"社区中心专员", role_welfare_staff:"福利专员", role_agency_admin:"机构负责人", role_welfare_super_admin:"福利总监", role_system_admin:"系统管理员",
+    cs_title:"申请管理", cs_sub:"审核福利申请并处理代理申请。", cs_s1:"已受理", cs_s2:"待处理", cs_s3:"代理申请", cs_list:"申请列表",
+    ws_title:"福利项目管理", ws_sub:"管理负责的福利项目与审批。", ws_s1:"负责项目", ws_s2:"待审批", ws_s3:"本月发放", ws_list:"负责的福利项目",
+    aa_title:"机构仪表盘", aa_sub:"管理机构层面的处理与自动对接批次。", aa_s1:"管理家庭", aa_s2:"进行中申请", aa_s3:"批次执行次数", aa_batch:"自动对接批次状态",
+    wsa_title:"全国仪表盘", wsa_sub:"统筹全国家庭与福利对接情况。", wsa_s1:"对接福利服务", wsa_s2:"家庭总数", wsa_s3:"支援市·道", wsa_region:"各地区家庭数(前列)",
+    sa_title:"系统管理", sa_sub:"管理数据同步、用户权限与系统日志。", sa_s1:"注册用户", sa_s2:"API状态", sa_s3:"同步数据", sa_perm:"用户权限管理",
+    th_applicant:"申请人", th_service:"福利项目", th_type:"类型", th_status:"状态", th_program:"项目名", th_target:"对象", th_budget:"预算", th_apps:"申请", th_round:"批次", th_target_hh:"目标家庭", th_matched:"对接", th_region:"地区", th_hh:"家庭数", th_matched_rate:"对接率", th_account:"账户", th_role:"角色",
+    ty_self:"本人", ty_deleg:"代理", stt_wait:"待处理", stt_done:"已批准", stt_complete:"完成", stt_active:"启用", tg_lowinc:"低收入家庭", tg_senior:"老年", tg_emerg:"危机家庭" },
   vi:{ brandSub:"Dịch vụ phúc lợi tích hợp · Mọi quyền lợi trong một nơi", largeText:"A Chữ to", highContrast:"Tương phản", easyMode:"Dễ hiểu",
     roleLabel:"Vai trò", roleCitizen:"Công dân (Tìm phúc lợi)", roleStaff:"Cán bộ phúc lợi", roleAdmin:"Quản lý phúc lợi",
     heroEyebrow:"✦ Dịch vụ phúc lợi tích hợp Hàn Quốc · Demo",
@@ -495,30 +662,46 @@ const I18N = {
     searchBtn:"Tìm phúc lợi", precisionLabel:"Ưu tiên chính xác (ẩn không đủ điều kiện)", cutoffLabel:"Ngưỡng tương đồng",
     condTitle:"Chọn điều kiện chính", fAge:"Tuổi", fGender:"Giới tính", fIncome:"Thu nhập tháng (vạn KRW)", fHousehold:"Số người", fSido:"Tỉnh/TP", fSgg:"Quận/Huyện",
     lblHouseholdType:"Loại hộ", lblLifeCycle:"Giai đoạn", lblInterest:"Quan tâm",
-    resultsTitle:"Phúc lợi bạn có thể nhận", uncertainTitle:"Có thể nhận nếu bổ sung thông tin", emptyHint:"Nhập thông tin và nhấn [Tìm phúc lợi]." },
+    resultsTitle:"Phúc lợi bạn có thể nhận", uncertainTitle:"Có thể nhận nếu bổ sung thông tin", emptyHint:"Nhập thông tin và nhấn [Tìm phúc lợi].",
+    role_citizen:"Công dân", role_center_staff:"Cán bộ trung tâm", role_welfare_staff:"Cán bộ phúc lợi", role_agency_admin:"Trưởng cơ quan", role_welfare_super_admin:"Giám đốc phúc lợi", role_system_admin:"Quản trị hệ thống",
+    cs_title:"Quản lý đơn", cs_sub:"Xem xét đơn phúc lợi và xử lý đơn ủy quyền.", cs_s1:"Đã tiếp nhận", cs_s2:"Chờ xử lý", cs_s3:"Đơn ủy quyền", cs_list:"Danh sách đơn",
+    ws_title:"Quản lý chương trình", ws_sub:"Quản lý chương trình phúc lợi và phê duyệt.", ws_s1:"Chương trình", ws_s2:"Chờ duyệt", ws_s3:"Chi tháng này", ws_list:"Chương trình phụ trách",
+    aa_title:"Bảng điều khiển cơ quan", aa_sub:"Quản lý xử lý cấp cơ quan và đợt tự động kết nối.", aa_s1:"Hộ quản lý", aa_s2:"Đơn đang xử lý", aa_s3:"Số lần chạy đợt", aa_batch:"Trạng thái đợt tự động kết nối",
+    wsa_title:"Bảng điều khiển toàn quốc", wsa_sub:"Tổng quản lý hộ & kết nối phúc lợi toàn quốc.", wsa_s1:"Dịch vụ liên kết", wsa_s2:"Tổng số hộ", wsa_s3:"Tỉnh·thành", wsa_region:"Số hộ theo vùng (cao nhất)",
+    sa_title:"Quản lý hệ thống", sa_sub:"Quản lý đồng bộ dữ liệu, quyền và nhật ký.", sa_s1:"Người dùng", sa_s2:"Trạng thái API", sa_s3:"Dữ liệu đồng bộ", sa_perm:"Quản lý quyền người dùng",
+    th_applicant:"Người nộp", th_service:"Chương trình", th_type:"Loại", th_status:"Trạng thái", th_program:"Tên CT", th_target:"Đối tượng", th_budget:"Ngân sách", th_apps:"Đơn", th_round:"Đợt", th_target_hh:"Hộ mục tiêu", th_matched:"Kết nối", th_region:"Vùng", th_hh:"Số hộ", th_matched_rate:"Tỷ lệ", th_account:"Tài khoản", th_role:"Vai trò",
+    ty_self:"Bản thân", ty_deleg:"Ủy quyền", stt_wait:"Chờ", stt_done:"Đã duyệt", stt_complete:"Xong", stt_active:"Hoạt động", tg_lowinc:"Hộ thu nhập thấp", tg_senior:"Người già", tg_emerg:"Hộ khủng hoảng" },
 };
 function applyLang(lang) {
-  const dict = I18N[lang] || I18N.ko;
+  const dict = I18N[lang] || {};
+  const ko = (lang === "ko");
   document.querySelectorAll("[data-i18n]").forEach(el => {
-    const k = el.dataset.i18n; if (dict[k] != null) el.textContent = dict[k];
+    if (el.dataset.i18nOrig == null) el.dataset.i18nOrig = el.textContent;
+    const k = el.dataset.i18n;
+    el.textContent = ko ? el.dataset.i18nOrig : (dict[k] != null ? dict[k] : el.dataset.i18nOrig);
   });
   document.querySelectorAll("[data-i18n-html]").forEach(el => {
-    const k = el.dataset.i18nHtml; if (dict[k] != null) el.innerHTML = dict[k];
+    if (el.dataset.i18nOrigHtml == null) el.dataset.i18nOrigHtml = el.innerHTML;
+    const k = el.dataset.i18nHtml;
+    el.innerHTML = ko ? el.dataset.i18nOrigHtml : (dict[k] != null ? dict[k] : el.dataset.i18nOrigHtml);
   });
   document.querySelectorAll("[data-i18n-ph]").forEach(el => {
-    const k = el.dataset.i18nPh; if (dict[k] != null) el.placeholder = dict[k];
+    if (el.dataset.i18nOrigPh == null) el.dataset.i18nOrigPh = el.placeholder;
+    const k = el.dataset.i18nPh;
+    el.placeholder = ko ? el.dataset.i18nOrigPh : (dict[k] != null ? dict[k] : el.dataset.i18nOrigPh);
   });
   document.documentElement.lang = lang;
 }
 document.getElementById("langSelect").addEventListener("change", e => applyLang(e.target.value));
 
-/* ===== 역할 선택 (이 시연은 국민 화면만 구현) ===== */
-document.getElementById("roleSelect").addEventListener("change", e => {
-  if (e.target.value !== "citizen") {
-    alert("이 시연 프로토타입은 '국민(복지 찾기)' 화면만 제공합니다. 담당자·총괄 화면은 향후 연계 예정입니다.");
-    e.target.value = "citizen";
-  }
-});
+/* ===== 역할 선택 → 화면 전환 ===== */
+function switchRole(role) {
+  document.querySelectorAll(".role-view").forEach(v => v.classList.remove("active"));
+  const view = document.getElementById("view-" + role);
+  (view || document.getElementById("view-citizen")).classList.add("active");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+document.getElementById("roleSelect").addEventListener("change", e => switchRole(e.target.value));
 
 document.getElementById("searchBtn").addEventListener("click", search);
 loadFacets();
