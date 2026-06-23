@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>복지 ONE-GOV - 복지 통합서비스 (시연용 프로토타입)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  :root{
+    --bg:#ffffff; --bg-tint:#f7f5ff; --card-bg:#ffffff;
+    --text:#1d1b2e; --muted:#6c6a7c;
+    --primary:#7c5cfc; --primary-dark:#6a47f0; --accent:#a78bfa;
+    --grad:linear-gradient(135deg,#7c5cfc 0%,#9d7bff 100%);
+    --gov-deep:#2b2640; --border:#ebe9f5; --soft:#f2effe;
+    --radius:16px; --shadow:0 10px 30px rgba(124,92,252,.1);
+  }
+  *{box-sizing:border-box;}
+  html{font-size:17px;}
+  body{margin:0;font-family:Pretendard,'Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+    background:var(--bg);color:var(--text);line-height:1.6;}
+
+  .gov-bar{background:var(--gov-deep);color:#efeaff;font-size:.78rem;}
+  .gov-bar-inner{max-width:960px;margin:0 auto;padding:6px 16px;}
+
+  .app-header{position:sticky;top:0;z-index:30;background:#ffffffe0;
+    backdrop-filter:saturate(180%) blur(10px);-webkit-backdrop-filter:saturate(180%) blur(10px);
+    border-bottom:1px solid var(--border);padding:12px 0;}
+  .header-inner{max-width:960px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  .header-right{margin-left:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+
+  .accessibility-controls{display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+  .a11y-btn{border:1px solid var(--border);background:#fff;color:var(--muted);border-radius:999px;
+    padding:7px 12px;cursor:pointer;font-size:.82rem;font-weight:600;font-family:inherit;}
+  .a11y-btn.active{background:var(--soft);color:var(--primary-dark);border-color:var(--accent);}
+  .a11y-lang{border:1px solid var(--border);border-radius:999px;padding:7px 10px;background:#fff;
+    color:var(--text);width:auto;font-size:.82rem;}
+  .role-switcher{display:flex;flex-direction:row;align-items:center;gap:6px;font-weight:600;
+    background:var(--soft);border:1px solid var(--border);border-radius:999px;padding:4px 6px 4px 12px;}
+  .role-switcher-label{font-size:.82rem;color:var(--muted);}
+  .role-switcher select{width:auto;border:none;background:transparent;padding:6px 8px;font-weight:700;
+    color:var(--primary-dark);font-size:.82rem;}
+
+  /* 접근성 모드 (기준화면 동일) */
+  body.large-text{font-size:1.18em;}
+  body.easy-mode{line-height:1.8;}
+  body.easy-mode .primary-button{font-size:1.05rem;}
+  body.high-contrast{--bg:#000000;--bg-tint:#000000;--card-bg:#0b0b0b;--text:#ffffff;--muted:#ffd84d;
+    --primary:#ffd400;--primary-dark:#ffe23f;--accent:#ffe23f;--border:#ffffff;--soft:#161616;}
+  body.high-contrast .primary-button{color:#000;}
+  body.high-contrast .gov-bar{background:#000;color:#ffe23f;border-bottom:2px solid #ffe23f;}
+  body.high-contrast .hero h2,body.high-contrast .grad-text,body.high-contrast .hero-stat b{
+    color:#ffe23f;-webkit-text-fill-color:#ffe23f;}
+  body.high-contrast .rec-category,body.high-contrast .suggest{background:#161616;}
+  .brand-logo{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;
+    background:var(--grad);color:#fff;font-weight:800;border-radius:12px;font-size:1rem;box-shadow:0 6px 16px #7c5cfc59;}
+  .brand-name{margin:0;font-size:1.3rem;letter-spacing:-.02em;font-weight:800;}
+  .brand-sub{margin:0;color:var(--muted);font-size:.8rem;}
+
+  main{max-width:960px;margin:0 auto;padding:0 16px 48px;}
+
+  /* HERO */
+  .hero{text-align:center;padding:48px 24px 36px;margin-bottom:26px;
+    background:radial-gradient(60% 90% at 50% 0%,var(--bg-tint) 0%,rgba(255,255,255,0) 70%);}
+  .hero-eyebrow{display:inline-block;background:var(--soft);border:1px solid var(--border);color:var(--primary-dark);
+    font-size:.84rem;font-weight:700;border-radius:999px;padding:7px 16px;margin-bottom:18px;}
+  .hero h2{margin-top:0;font-size:2rem;letter-spacing:-.02em;line-height:1.3;}
+  .grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .hero-desc{color:var(--muted);font-size:1.08rem;max-width:660px;margin:0 auto;}
+  .hero-stats{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin:28px auto 0;max-width:720px;}
+  .hero-stat{flex:1 1 140px;background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px 10px;box-shadow:var(--shadow);}
+  .hero-stat b{display:block;font-size:1.7rem;font-weight:800;background:var(--grad);
+    -webkit-background-clip:text;background-clip:text;color:transparent;}
+  .hero-stat span{font-size:.84rem;color:var(--muted);}
+
+  .card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);
+    box-shadow:0 1px 2px #1d1b2e0a;padding:22px;margin-bottom:18px;}
+  .card h3{margin:0 0 16px;font-size:1.15rem;letter-spacing:-.01em;}
+
+  textarea,input,select{font-family:inherit;font-size:1rem;padding:11px 13px;border:1.5px solid var(--border);
+    border-radius:10px;background:var(--card-bg);color:var(--text);width:100%;
+    transition:border-color .15s,box-shadow .15s;}
+  textarea:focus,input:focus,select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px #7c5cfc26;}
+
+  .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;}
+  .field{display:flex;flex-direction:column;gap:6px;}
+  .field-label{font-weight:600;font-size:.92rem;}
+
+  .chip-group{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;}
+  .chip{border:1.5px solid var(--border);background:#fff;color:var(--muted);border-radius:999px;
+    padding:7px 14px;cursor:pointer;font-size:.9rem;font-weight:600;transition:all .13s;user-select:none;}
+  .chip-on{background:var(--soft);color:var(--primary-dark);border-color:var(--accent);}
+  .section-label{display:block;font-weight:600;font-size:.92rem;margin:16px 0 4px;}
+
+  .primary-button{border-radius:999px;padding:12px 22px;font-size:1rem;font-weight:700;cursor:pointer;
+    border:none;background:var(--grad);color:#fff;box-shadow:0 8px 20px #7c5cfc4d;font-family:inherit;
+    transition:transform .12s,box-shadow .15s;}
+  .primary-button:hover{transform:translateY(-1px);box-shadow:0 10px 24px #7c5cfc6b;}
+  .primary-button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none;transform:none;}
+  .primary-button.big{font-size:1.1rem;padding:15px 24px;width:100%;margin-top:8px;}
+
+  .nl-options{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:12px;
+    font-size:.86rem;color:var(--muted);}
+  .nl-options label{display:flex;align-items:center;gap:6px;}
+  .nl-options input[type=number]{width:90px;}
+  #status{color:var(--primary-dark);font-weight:600;}
+
+  /* 추천 결과 */
+  .rec-list .rec-count{font-weight:700;margin:0 0 12px;}
+  .rec-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:12px;}
+  .rec-card.elig-high{border-left:6px solid #1aa260;}
+  .rec-card.elig-mid{border-left:6px solid #e0a800;}
+  .rec-card.elig-low{border-left:6px solid #9aa3b2;}
+  .rec-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+  .rec-card h4{margin:0 0 4px;font-size:1.15rem;letter-spacing:-.01em;}
+  .rec-meta{color:var(--muted);font-size:.82rem;}
+  .rec-category{display:inline-block;background:var(--soft);color:var(--primary-dark);border-radius:6px;
+    padding:2px 8px;font-size:.8rem;margin-top:4px;}
+  .rec-elig{text-align:right;white-space:nowrap;}
+  .rec-score{display:block;font-size:.8rem;color:var(--muted);margin-top:4px;}
+  .rec-body{font-size:.93rem;margin-top:8px;}
+  .rec-reason{background:var(--soft);border-radius:8px;padding:8px 11px;font-size:.85rem;margin-top:8px;}
+  .rec-sub{color:var(--muted);font-size:.82rem;margin-top:4px;}
+
+  .elig-badge{font-weight:700;padding:4px 11px;border-radius:999px;font-size:.8rem;}
+  .badge-green{background:#e3f7ec;color:#128a4f;}
+  .badge-red{background:#fde4e4;color:#c0392b;}
+  .badge-amber{background:#fff3d6;color:#a87900;}
+  .badge-purple{background:#efe6fb;color:#6c2bd9;}
+
+  .suggest{border:1.5px solid var(--accent);background:linear-gradient(135deg,#f7f5ff,#fdf2d6);
+    border-radius:var(--radius);padding:18px 20px;margin-bottom:18px;}
+  .suggest b{color:var(--primary-dark);}
+  .suggest .btn-sm{background:#fff;border:1.5px solid var(--accent);color:var(--primary-dark);
+    border-radius:999px;padding:7px 14px;font-weight:700;font-size:.85rem;cursor:pointer;margin:4px 4px 0 0;}
+
+  .empty-state{text-align:center;color:var(--muted);padding:18px;}
+  .count-pill{background:var(--soft);color:var(--primary-dark);font-weight:700;font-size:.85rem;
+    padding:3px 11px;border-radius:999px;margin-left:8px;}
+  details{margin:8px 0 0;}
+  summary{cursor:pointer;color:var(--muted);font-size:.85rem;}
+  pre{background:#1d1b2e;color:#efeaff;padding:14px;border-radius:10px;overflow:auto;font-size:.8rem;
+    font-family:D2Coding,Consolas,monospace;}
+  .app-footer{margin-top:32px;padding-top:16px;border-top:1px solid var(--border);
+    color:var(--muted);font-size:.82rem;text-align:center;}
+
+  .spinner{display:inline-block;width:16px;height:16px;border:3px solid #e5e7eb;border-top-color:var(--primary);
+    border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:6px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  #overlay{display:none;position:fixed;inset:0;background:rgba(247,245,255,.7);z-index:1000;text-align:center;}
+  #overlay .box{margin-top:18%;display:inline-block;background:#fff;border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:26px 34px;}
+  #overlay .big-spinner{width:42px;height:42px;border:5px solid #e5e7eb;border-top-color:var(--primary);
+    border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px;}
+</style>
+</head>
+<body>
+<div id="overlay"><div class="box"><div class="big-spinner"></div><div id="overlayText">맞춤 복지 분석 중...</div></div></div>
+
+<div class="gov-bar"><div class="gov-bar-inner">대한민국 복지 통합서비스 · 시연용 프로토타입</div></div>
+
+<header class="app-header"><div class="header-inner">
+  <span class="brand-logo">ONE</span>
+  <div>
+    <h1 class="brand-name">복지 ONE-GOV</h1>
+    <p class="brand-sub" data-i18n="brandSub">복지 통합서비스 · 받을 수 있는 혜택을 한 번에</p>
+  </div>
+  <div class="header-right">
+    <div class="accessibility-controls">
+      <button class="a11y-btn" id="btnLargeText" aria-pressed="false"><span data-i18n="largeText">가 글자 크게</span></button>
+      <button class="a11y-btn" id="btnHighContrast" aria-pressed="false">◐ <span data-i18n="highContrast">고대비</span></button>
+      <button class="a11y-btn" id="btnEasyMode" aria-pressed="false">💬 <span data-i18n="easyMode">쉬운 말</span></button>
+      <select class="a11y-lang" id="langSelect" aria-label="언어 선택">
+        <option value="ko">한국어</option>
+        <option value="en">English</option>
+        <option value="zh">中文</option>
+        <option value="vi">Tiếng Việt</option>
+      </select>
+    </div>
+    <label class="role-switcher">
+      <span class="role-switcher-label" data-i18n="roleLabel">역할</span>
+      <select id="roleSelect" aria-label="역할 선택">
+        <option value="citizen" data-i18n="roleCitizen">국민(복지 찾기)</option>
+        <option value="staff" data-i18n="roleStaff">복지 담당</option>
+        <option value="admin" data-i18n="roleAdmin">복지 총괄</option>
+      </select>
+    </label>
+  </div>
+</div></header>
+
+<main>
+  <!-- HERO (기준화면 그대로) -->
+  <section class="hero">
+    <span class="hero-eyebrow" data-i18n="heroEyebrow">✦ 대한민국 복지 통합서비스 · 시연용</span>
+    <h2 data-i18n-html="heroTitle">내게 맞는 복지를 <span class="grad-text">한곳에서</span><br>찾고, 신청하고, 자동으로 연결하세요.</h2>
+    <p class="hero-desc" data-i18n="heroDesc">복지 ONE-GOV 는 중앙부처와 지자체에 흩어져 있는 복지를 한 번에 검색·신청하고,
+      입력한 상황을 바탕으로 받을 수 있는 복지를 자동으로 찾아주는 국가 복지 통합 플랫폼입니다.
+      복잡한 자격 계산 없이, 아래 조건만 선택하면 됩니다.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><b>5,021</b><span data-i18n="statServices">연계 복지서비스</span></div>
+      <div class="hero-stat"><b>16</b><span data-i18n="statRegions">지원 시·도</span></div>
+      <div class="hero-stat"><b>AI</b><span data-i18n="statAI">맞춤 자격 심사</span></div>
+    </div>
+  </section>
+
+  <!-- 자연어로 상황을 입력하세요 ← 현재화면 내 상황 입력 영역 -->
+  <div class="card nl-section">
+    <h3 data-i18n="nlTitle">자연어로 상황을 입력하세요</h3>
+    <textarea id="freeText" rows="2" data-i18n-ph="nlPlaceholder" placeholder="예: 혼자 사는 52세입니다. 세종시에 살고 일자리가 없어요. 생활비와 돌봄 지원을 받을 수 있나요?"></textarea>
+    <button class="primary-button big" id="searchBtn" data-i18n="searchBtn">복지 찾기</button>
+    <div class="nl-options">
+      <span id="status"></span>
+      <label><input type="checkbox" id="precisionMode" checked> <span data-i18n="precisionLabel">정확도 우선(받을 수 없는 혜택 숨김)</span></label>
+      <label><span data-i18n="cutoffLabel">유사도 컷오프</span> <input type="number" id="minScore" step="0.01" placeholder="비움=전체"></label>
+    </div>
+  </div>
+
+  <!-- 주요 조건 선택 ← 현재화면 폼 영역 -->
+  <div class="card condition-form">
+    <h3 data-i18n="condTitle">주요 조건 선택</h3>
+    <div class="form-grid">
+      <label class="field"><span class="field-label" data-i18n="fAge">나이</span>
+        <input type="number" id="age" placeholder="예: 52"></label>
+      <label class="field"><span class="field-label" data-i18n="fGender">성별</span>
+        <select id="gender"><option value="">무관</option><option value="M">남성</option><option value="F">여성</option></select></label>
+      <label class="field"><span class="field-label" data-i18n="fIncome">월소득(만원)</span>
+        <input type="number" id="incomeMan" placeholder="예: 60"></label>
+      <label class="field"><span class="field-label" data-i18n="fHousehold">세대원 수</span>
+        <select id="householdSize">
+          <option value="">선택</option>
+          <option value="1">1인</option><option value="2">2인</option><option value="3">3인</option>
+          <option value="4">4인</option><option value="5">5인</option><option value="6">6인</option>
+          <option value="7">7인 이상</option>
+        </select></label>
+      <label class="field"><span class="field-label" data-i18n="fSido">시도</span>
+        <select id="regionSido"><option value="">전체</option></select></label>
+      <label class="field"><span class="field-label" data-i18n="fSgg">시군구</span>
+        <select id="regionSgg"><option value="">전체</option></select></label>
+    </div>
+
+    <label class="section-label" data-i18n="lblHouseholdType">가구유형</label>
+    <div class="chip-group" id="householdTypes"></div>
+    <label class="section-label" data-i18n="lblLifeCycle">생애주기</label>
+    <div class="chip-group" id="lifeCycles"></div>
+    <label class="section-label" data-i18n="lblInterest">관심주제</label>
+    <div class="chip-group" id="interestThemes"></div>
+  </div>
+
+  <div id="suggestBanner" class="suggest" style="display:none;"></div>
+
+  <!-- 추천 결과 (기준화면 rec-list 구조) -->
+  <div class="card rec-list">
+    <p class="rec-count"><span data-i18n="resultsTitle">받을 수 있는 혜택</span> <span class="count-pill" id="resultCount">0</span></p>
+    <div id="results"><div class="empty-state" data-i18n="emptyHint">위에 정보를 입력하고 [복지 찾기]를 누르세요.</div></div>
+  </div>
+
+  <div class="card rec-list">
+    <p class="rec-count"><span data-i18n="uncertainTitle">추가 정보 입력 시 받을 수 있을지 모르는 혜택</span> <span class="count-pill" id="uncertainCount">0</span></p>
+    <div id="uncertainResults"><div class="empty-state">—</div></div>
+  </div>
+
+  <details>
+    <summary>검색 조건·판정 디버그 보기</summary>
+    <pre id="debugOut"></pre>
+  </details>
+
+  <div class="app-footer">복지 ONE-GOV · 시연용 프로토타입 · 데이터 출처: 복지로 / 지자체 공공데이터</div>
+</main>
+
+<script>
+// 같은 출처(서버가 서빙하는 페이지)에서 호출 — 로컬 uvicorn·Vercel 모두 동작
+const API = "";
+let REGION_MAP = {};
+
+function chipGroup(containerId, values) {
+  const c = document.getElementById(containerId);
+  c.innerHTML = values.map(v => `<span class="chip" data-val="${v}">${v}</span>`).join("");
+  c.querySelectorAll(".chip").forEach(ch =>
+    ch.addEventListener("click", () => ch.classList.toggle("chip-on")));
+}
+function getChips(containerId) {
+  return Array.from(document.querySelectorAll(`#${containerId} .chip-on`)).map(el => el.dataset.val);
+}
+function setChips(containerId, values) {
+  const set = new Set(values || []);
+  document.querySelectorAll(`#${containerId} .chip`).forEach(ch =>
+    ch.classList.toggle("chip-on", set.has(ch.dataset.val)));
+}
+
+// 자연어에서 추출/병합된 조건을 폼에 자동 반영
+function autofillForm(m) {
+  if (!m) return;
+  if (m.age != null) document.getElementById("age").value = m.age;
+  if (m.gender) document.getElementById("gender").value = m.gender;
+  if (m.income_man != null && m.income_man > 0) document.getElementById("incomeMan").value = m.income_man;
+  if (m.household_size != null) document.getElementById("householdSize").value = m.household_size;
+  if (m.region_sido) {
+    document.getElementById("regionSido").value = m.region_sido;
+    onSidoChange();
+    if (m.region_sgg) document.getElementById("regionSgg").value = m.region_sgg;
+  }
+  setChips("householdTypes", m.household_types);
+  setChips("lifeCycles", m.life_cycles);
+  setChips("interestThemes", m.interest_themes);
+}
+
+async function loadFacets() {
+  const facets = await (await fetch(`${API}/api/facets`)).json();
+  const sidoSel = document.getElementById("regionSido");
+  facets.region_sido.forEach(v => {
+    const o = document.createElement("option"); o.value = v; o.textContent = v; sidoSel.appendChild(o);
+  });
+  chipGroup("householdTypes", facets.household_types);
+  chipGroup("lifeCycles", facets.life_cycles);
+  chipGroup("interestThemes", facets.interest_themes);
+
+  REGION_MAP = await (await fetch(`${API}/api/regions`)).json();
+  sidoSel.addEventListener("change", onSidoChange);
+}
+function onSidoChange() {
+  const sido = document.getElementById("regionSido").value;
+  const sggSel = document.getElementById("regionSgg");
+  sggSel.innerHTML = '<option value="">전체</option>';
+  (REGION_MAP[sido] || []).forEach(v => {
+    const o = document.createElement("option"); o.value = v; o.textContent = v; sggSel.appendChild(o);
+  });
+}
+
+const VERDICT_BADGE = { "적격":"badge-green", "부적격":"badge-red", "불명확":"badge-amber" };
+const VERDICT_BORDER = { "적격":"elig-high", "부적격":"elig-low", "불명확":"elig-mid" };
+
+function card(s) {
+  const badge = VERDICT_BADGE[s._verdict] || "badge-purple";
+  const border = VERDICT_BORDER[s._verdict] || "";
+  return `<div class="rec-card ${border}">
+    <div class="rec-card-head">
+      <div>
+        <h4>${s.serv_nm}</h4>
+        <div class="rec-meta">${s.source} · ${s.dept_nm}</div>
+        <span class="rec-category">${s.provision_type || "복지서비스"}</span>
+      </div>
+      <div class="rec-elig">
+        <span class="elig-badge ${badge}">${s._verdict || "-"}</span>
+        <span class="rec-score">유사도 ${s._score ?? "-"}</span>
+      </div>
+    </div>
+    <div class="rec-body">${s.summary || ""}</div>
+    ${s._reason ? `<div class="rec-reason"><b>판정사유:</b> ${s._reason}${s._needed_info && s._needed_info.length ? ` <b>· 필요정보:</b> ${s._needed_info.join(", ")}` : ""}</div>` : ""}
+    <div class="rec-sub">대상: ${(s.target_detail || "").replace(/\n+/g," ").slice(0,160)}</div>
+    <div class="rec-sub">문의처: ${s.contact || "-"} · 신청: ${(s.apply_method || "-").replace(/\n+/g," ").slice(0,60)}</div>
+  </div>`;
+}
+
+const FIELD_TO_INPUT = {
+  "나이":"age", "성별":"gender", "소득수준":"incomeMan",
+  "가구유형":"householdTypes", "거주지역":"regionSido",
+  "주택소유여부":null, "취업상태":null,
+};
+function highlight(elId) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  const prev = el.style.boxShadow;
+  el.style.boxShadow = "0 0 0 3px #ffd84d";
+  el.scrollIntoView({ behavior:"smooth", block:"center" });
+  if (el.focus) el.focus();
+  setTimeout(() => { el.style.boxShadow = prev; }, 2500);
+}
+function renderSuggestBanner(fields, uncertainCount) {
+  const b = document.getElementById("suggestBanner");
+  if (!fields.length) { b.style.display = "none"; return; }
+  const labels = fields.map(f => `${f.label}(${f.count}건)`).join(", ");
+  const buttons = fields.map(f => {
+    const id = FIELD_TO_INPUT[f.label];
+    return id ? `<button class="btn-sm" onclick="highlight('${id}')">＋ ${f.label} 입력</button>`
+              : `<button class="btn-sm" onclick="highlight('freeText')">＋ ${f.label} (자연어로)</button>`;
+  }).join(" ");
+  b.innerHTML = `<b>💡 정보를 더 입력하면 혜택을 더 찾을 수 있어요!</b><br>
+    입력하지 않은 정보 때문에 <b>${uncertainCount}건</b>의 혜택이 자격 확인 보류 상태입니다.<br>
+    부족한 정보: <b>${labels}</b><br><br>${buttons}
+    <div style="margin-top:8px;font-size:.82rem;color:var(--muted);">해당 항목을 채우고 다시 검색하면 받을 수 있는 혜택으로 분류됩니다.</div>`;
+  b.style.display = "block";
+}
+
+async function search() {
+  const status = document.getElementById("status");
+  const btn = document.getElementById("searchBtn");
+  const overlay = document.getElementById("overlay");
+  status.innerHTML = '<span class="spinner"></span>분석 중... (5~15초)';
+  overlay.style.display = "block";
+  btn.disabled = true;
+
+  const body = {
+    free_text: document.getElementById("freeText").value,
+    age: document.getElementById("age").value ? parseInt(document.getElementById("age").value) : null,
+    gender: document.getElementById("gender").value || null,
+    income_man: document.getElementById("incomeMan").value ? parseFloat(document.getElementById("incomeMan").value) : null,
+    household_size: document.getElementById("householdSize").value ? parseInt(document.getElementById("householdSize").value) : null,
+    region_sido: document.getElementById("regionSido").value || null,
+    region_sgg: document.getElementById("regionSgg").value || null,
+    household_types: getChips("householdTypes"),
+    life_cycles: getChips("lifeCycles"),
+    interest_themes: getChips("interestThemes"),
+    min_score: document.getElementById("minScore").value ? parseFloat(document.getElementById("minScore").value) : null,
+    precision_mode: document.getElementById("precisionMode").checked,
+  };
+
+  let data;
+  try {
+    const res = await fetch(`${API}/api/search`, {
+      method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body),
+    });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    data = await res.json();
+  } catch (e) {
+    status.textContent = "오류: " + e.message + " (서버·주소 127.0.0.1:8000 확인)";
+    overlay.style.display = "none"; btn.disabled = false; return;
+  }
+  status.textContent = "✓ 완료";
+  overlay.style.display = "none"; btn.disabled = false;
+
+  autofillForm(data.merged_criteria);
+
+  document.getElementById("debugOut").textContent = JSON.stringify({
+    merged_criteria:data.merged_criteria, parsed_from_text:data.parsed_from_text,
+    query_text:data.query_text, verdict_counts:data.verdict_counts,
+    filtered_count:data.filtered_count, parse_error:data.parse_error,
+    rerank_error:data.rerank_error, verify_error:data.verify_error,
+  }, null, 2);
+
+  document.getElementById("resultCount").textContent = data.count;
+  document.getElementById("results").innerHTML =
+    data.results.length ? data.results.map(card).join("")
+                        : '<div class="empty-state">조건에 맞는 적격 혜택이 없습니다.</div>';
+
+  document.getElementById("uncertainCount").textContent = data.uncertain_count || 0;
+  document.getElementById("uncertainResults").innerHTML =
+    (data.uncertain_results && data.uncertain_results.length)
+      ? data.uncertain_results.map(card).join("") : '<div class="empty-state">—</div>';
+
+  renderSuggestBanner(data.suggested_fields || [], data.uncertain_count || 0);
+}
+
+/* ===== 접근성 바: 큰글자 / 고대비 / 쉬운말 ===== */
+function toggleMode(btnId, cls) {
+  const btn = document.getElementById(btnId);
+  const on = document.body.classList.toggle(cls);
+  btn.classList.toggle("active", on);
+  btn.setAttribute("aria-pressed", on);
+}
+document.getElementById("btnLargeText").addEventListener("click", () => toggleMode("btnLargeText", "large-text"));
+document.getElementById("btnHighContrast").addEventListener("click", () => toggleMode("btnHighContrast", "high-contrast"));
+document.getElementById("btnEasyMode").addEventListener("click", () => toggleMode("btnEasyMode", "easy-mode"));
+
+/* ===== 언어 전환 (UI 문구) ===== */
+const I18N = {
+  ko:{ brandSub:"복지 통합서비스 · 받을 수 있는 혜택을 한 번에", largeText:"가 글자 크게", highContrast:"고대비", easyMode:"쉬운 말",
+    roleLabel:"역할", roleCitizen:"국민(복지 찾기)", roleStaff:"복지 담당", roleAdmin:"복지 총괄",
+    heroEyebrow:"✦ 대한민국 복지 통합서비스 · 시연용",
+    heroTitle:'내게 맞는 복지를 <span class="grad-text">한곳에서</span><br>찾고, 신청하고, 자동으로 연결하세요.',
+    heroDesc:"중앙부처와 지자체에 흩어져 있는 복지를 한 번에 검색하고, 입력한 상황을 바탕으로 받을 수 있는 복지를 자동으로 찾아드립니다.",
+    statServices:"연계 복지서비스", statRegions:"지원 시·도", statAI:"맞춤 자격 심사",
+    nlTitle:"자연어로 상황을 입력하세요", nlPlaceholder:"예: 혼자 사는 52세입니다. 세종시에 살고 일자리가 없어요. 받을 수 있는 혜택이 궁금해요.",
+    searchBtn:"복지 찾기", precisionLabel:"정확도 우선(받을 수 없는 혜택 숨김)", cutoffLabel:"유사도 컷오프",
+    condTitle:"주요 조건 선택", fAge:"나이", fGender:"성별", fIncome:"월소득(만원)", fHousehold:"세대원 수", fSido:"시도", fSgg:"시군구",
+    lblHouseholdType:"가구유형", lblLifeCycle:"생애주기", lblInterest:"관심주제",
+    resultsTitle:"받을 수 있는 혜택", uncertainTitle:"추가 정보 입력 시 받을 수 있을지 모르는 혜택", emptyHint:"위에 정보를 입력하고 [복지 찾기]를 누르세요." },
+  en:{ brandSub:"Integrated Welfare Service · All your benefits in one place", largeText:"A Large Text", highContrast:"High Contrast", easyMode:"Easy Language",
+    roleLabel:"Role", roleCitizen:"Citizen (Find Welfare)", roleStaff:"Welfare Officer", roleAdmin:"Welfare Admin",
+    heroEyebrow:"✦ Korea Integrated Welfare Service · Demo",
+    heroTitle:'Find the welfare that fits you, <span class="grad-text">all in one place</span><br>— search, apply, and connect automatically.',
+    heroDesc:"Search welfare scattered across central and local governments at once, and automatically find benefits you may receive based on your situation.",
+    statServices:"Linked services", statRegions:"Regions covered", statAI:"AI eligibility check",
+    nlTitle:"Describe your situation in your own words", nlPlaceholder:"e.g., I'm 52 and live alone in Sejong without a job. What benefits can I get?",
+    searchBtn:"Find Welfare", precisionLabel:"Precision first (hide ineligible)", cutoffLabel:"Similarity cutoff",
+    condTitle:"Key Conditions", fAge:"Age", fGender:"Gender", fIncome:"Monthly income (10k KRW)", fHousehold:"Household size", fSido:"Province", fSgg:"District",
+    lblHouseholdType:"Household type", lblLifeCycle:"Life stage", lblInterest:"Interests",
+    resultsTitle:"Benefits you can receive", uncertainTitle:"Possible with more information", emptyHint:"Enter info above and click [Find Welfare]." },
+  zh:{ brandSub:"福利综合服务 · 一站获取您的福利", largeText:"大 字体", highContrast:"高对比", easyMode:"简单语言",
+    roleLabel:"角色", roleCitizen:"市民(查找福利)", roleStaff:"福利专员", roleAdmin:"福利总管",
+    heroEyebrow:"✦ 韩国福利综合服务 · 演示",
+    heroTitle:'<span class="grad-text">一站式</span>找到适合您的福利，<br>搜索、申请并自动对接。',
+    heroDesc:"一次性搜索分散在中央和地方政府的福利，并根据您输入的情况自动找出您可能获得的福利。",
+    statServices:"对接福利服务", statRegions:"覆盖市·道", statAI:"智能资格审查",
+    nlTitle:"用自然语言描述您的情况", nlPlaceholder:"例如：我52岁独居，住在世宗市且没有工作，能领取哪些福利？",
+    searchBtn:"查找福利", precisionLabel:"精确优先(隐藏不符合的)", cutoffLabel:"相似度阈值",
+    condTitle:"主要条件选择", fAge:"年龄", fGender:"性别", fIncome:"月收入(万韩元)", fHousehold:"家庭人数", fSido:"市·道", fSgg:"市·郡·区",
+    lblHouseholdType:"家庭类型", lblLifeCycle:"生命周期", lblInterest:"关注主题",
+    resultsTitle:"您可获得的福利", uncertainTitle:"补充信息后或可获得的福利", emptyHint:"在上方输入信息并点击[查找福利]。" },
+  vi:{ brandSub:"Dịch vụ phúc lợi tích hợp · Mọi quyền lợi trong một nơi", largeText:"A Chữ to", highContrast:"Tương phản", easyMode:"Dễ hiểu",
+    roleLabel:"Vai trò", roleCitizen:"Công dân (Tìm phúc lợi)", roleStaff:"Cán bộ phúc lợi", roleAdmin:"Quản lý phúc lợi",
+    heroEyebrow:"✦ Dịch vụ phúc lợi tích hợp Hàn Quốc · Demo",
+    heroTitle:'Tìm phúc lợi phù hợp với bạn <span class="grad-text">tại một nơi</span><br>— tìm kiếm, đăng ký và kết nối tự động.',
+    heroDesc:"Tìm kiếm phúc lợi nằm rải rác ở trung ương và địa phương cùng lúc, tự động tìm quyền lợi bạn có thể nhận dựa trên hoàn cảnh.",
+    statServices:"Dịch vụ liên kết", statRegions:"Tỉnh·thành", statAI:"Xét duyệt bằng AI",
+    nlTitle:"Mô tả hoàn cảnh của bạn bằng lời", nlPlaceholder:"VD: Tôi 52 tuổi sống một mình ở Sejong, không có việc làm. Tôi nhận được phúc lợi gì?",
+    searchBtn:"Tìm phúc lợi", precisionLabel:"Ưu tiên chính xác (ẩn không đủ điều kiện)", cutoffLabel:"Ngưỡng tương đồng",
+    condTitle:"Chọn điều kiện chính", fAge:"Tuổi", fGender:"Giới tính", fIncome:"Thu nhập tháng (vạn KRW)", fHousehold:"Số người", fSido:"Tỉnh/TP", fSgg:"Quận/Huyện",
+    lblHouseholdType:"Loại hộ", lblLifeCycle:"Giai đoạn", lblInterest:"Quan tâm",
+    resultsTitle:"Phúc lợi bạn có thể nhận", uncertainTitle:"Có thể nhận nếu bổ sung thông tin", emptyHint:"Nhập thông tin và nhấn [Tìm phúc lợi]." },
+};
+function applyLang(lang) {
+  const dict = I18N[lang] || I18N.ko;
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const k = el.dataset.i18n; if (dict[k] != null) el.textContent = dict[k];
+  });
+  document.querySelectorAll("[data-i18n-html]").forEach(el => {
+    const k = el.dataset.i18nHtml; if (dict[k] != null) el.innerHTML = dict[k];
+  });
+  document.querySelectorAll("[data-i18n-ph]").forEach(el => {
+    const k = el.dataset.i18nPh; if (dict[k] != null) el.placeholder = dict[k];
+  });
+  document.documentElement.lang = lang;
+}
+document.getElementById("langSelect").addEventListener("change", e => applyLang(e.target.value));
+
+/* ===== 역할 선택 (이 시연은 국민 화면만 구현) ===== */
+document.getElementById("roleSelect").addEventListener("change", e => {
+  if (e.target.value !== "citizen") {
+    alert("이 시연 프로토타입은 '국민(복지 찾기)' 화면만 제공합니다. 담당자·총괄 화면은 향후 연계 예정입니다.");
+    e.target.value = "citizen";
+  }
+});
+
+document.getElementById("searchBtn").addEventListener("click", search);
+loadFacets();
+</script>
+</body>
+</html>

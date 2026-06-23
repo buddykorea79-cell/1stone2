@@ -1,0 +1,34 @@
+# 개발/중간 산출물 (배포 불필요)
+welfare_services_llm.json
+welfare_services_llm_filled.json
+resp.json
+regions.json
+*_report.txt
+missing_report*.txt
+judge_dump.txt
+verify_dump.txt
+field_labels.txt
+
+# 분석/전처리 스크립트
+analyze_missing.py
+check_fields.py
+check_final_missing.py
+fill_missing.py
+fill_neighbors.py
+
+# 기준화면 분석용 덤프
+ref.css
+ref.js
+ref_index.html
+
+# 민감/불필요 (API 키 포함 문서, 로컬 설정, 원본 CSV)
+AI hackerton 준비사항.txt
+.claude/
+welfare_detail.csv
+lcgv_welfare_detail.csv
+
+# 환경/캐시
+.env
+__pycache__/
+*.pyc
+.venv/
